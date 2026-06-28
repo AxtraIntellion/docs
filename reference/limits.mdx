@@ -1,0 +1,33 @@
+---
+title: "Limits"
+description: "Known and pending AXTL limits for the public docs MVP."
+---
+
+# Limits
+
+This page is intentionally conservative. Limits may vary by workspace during the beta.
+
+<Note>
+  Exact quota amounts are not published for the first preview. Use your AXTL dashboard or workspace settings as the source of truth.
+</Note>
+
+## Verified from request schema
+
+| Area | Limit |
+|---|---|
+| Generation `name` | 2 to 120 characters. |
+| Generation `prompt` | 10 to 100000 characters. |
+| Generation `model` | Optional, 1 to 80 characters when provided. |
+| Generation `region` | Optional, 1 to 80 characters when provided. |
+| Generation `model` default | `gpt-5.2`. |
+| Generation `region` default | `auto`. |
+| Agent API key `name` | 1 to 120 characters on create. |
+| Download token TTL | 60 seconds. |
+| Artifact download redirect TTL | 3600 seconds. |
+
+## Beta notes
+
+- Use `{AXTL_API_BASE_URL}` until your workspace confirms the production base URL.
+- Model selection is managed by AXTL unless your workspace exposes advanced model settings.
+- Use `auto` for regions unless your workspace settings specify otherwise.
+- Generation, deployment, test-call, artifact, validation, and agent API key limits may vary by workspace.

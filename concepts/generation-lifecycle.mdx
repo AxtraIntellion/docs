@@ -1,0 +1,54 @@
+---
+title: "Generation lifecycle"
+description: "How a backend moves from requirements to deployment."
+---
+
+# Generation lifecycle
+
+AXTL tracks backend creation as a lifecycle. The public docs should describe the user-facing flow and avoid promising status names beyond the verified API contract.
+
+## 1. Draft
+
+You provide requirements and name the backend.
+
+## 2. Generating
+
+AXTL creates a generation job and builds the backend artifact.
+
+## 3. Validating
+
+AXTL checks whether the artifact is deployable. Validation can include build, behavior, and quality checks. Detailed validation report fields may change during the beta.
+
+## 4. Ready
+
+The backend is ready to download or deploy.
+
+## 5. Deploying
+
+AXTL publishes the backend and tracks deployment progress.
+
+## 6. Deployed
+
+The backend has an endpoint URL and can be invoked.
+
+## 7. Failed
+
+Generation, validation, or deployment can fail. Use the job status, deployment status, and error response to decide whether to retry or update requirements.
+
+## Status names
+
+Generation jobs can return `queued`, `completed`, and `failed`. A new generation starts with an agent status of `generating`, and deployment starts with `deploying`.
+
+<Note>
+  Treat statuses as progress indicators during the beta. Build client logic around success, failure, and retry handling rather than a complete status enum.
+</Note>
+
+## Minimal lifecycle API
+
+```bash
+POST /v1/generate
+GET  /v1/generate/{jobId}
+POST /v1/deploy/{agentId}
+GET  /v1/deploy/{agentId}/status
+GET  /v1/deploy/{agentId}/endpoint
+```

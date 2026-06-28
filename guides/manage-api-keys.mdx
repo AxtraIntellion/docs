@@ -1,0 +1,61 @@
+---
+title: "Manage API keys"
+description: "Create, rotate, and revoke keys for generated backends."
+---
+
+# Manage API keys
+
+AXTL supports agent-scoped API key operations. These keys are separate from the bearer token used to call the AXTL control API.
+
+Use platform bearer authentication to manage keys. Use the returned agent API key to invoke the deployed backend with:
+
+```text
+Authorization: Bearer {AXTL_AGENT_KEY}
+```
+
+Agent API keys are scoped to one agent and cannot invoke a different agent slug.
+
+## List keys
+
+```bash
+curl "$AXTL_API_BASE_URL/v1/agents/{agentId}/api-keys" \
+  -H "Authorization: Bearer $AXTL_TOKEN"
+```
+
+## Create a key
+
+```bash
+curl -X POST "$AXTL_API_BASE_URL/v1/agents/{agentId}/api-keys" \
+  -H "Authorization: Bearer $AXTL_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Production"}'
+```
+
+Copy the returned key immediately. Secret key values may not be shown again.
+
+AXTL returns the raw key at `data.key` and safe key metadata at `data.apiKey`. The key metadata includes fields such as `id`, `agentId`, `name`, `type`, `status`, `lastFour`, and `prefix`.
+
+## Revoke a key
+
+```bash
+curl -X POST "$AXTL_API_BASE_URL/v1/agents/{agentId}/api-keys/{keyId}/revoke" \
+  -H "Authorization: Bearer $AXTL_TOKEN"
+```
+
+## Rotate a key
+
+```bash
+curl -X POST "$AXTL_API_BASE_URL/v1/agents/{agentId}/api-keys/{keyId}/rotate" \
+  -H "Authorization: Bearer $AXTL_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Production rotated"}'
+```
+
+Rotation revokes the old key and returns a new one-time `data.key`.
+
+## Key handling
+
+- Store keys in a secret manager.
+- Do not put keys in browser-side code.
+- Rotate keys if they are exposed.
+- Revoke keys that are no longer used.

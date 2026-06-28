@@ -1,47 +1,100 @@
 ---
 title: "Quickstart"
-description: "Begin with a guide on the fastest path to a successful outcome"
+description: "Create, deploy, and invoke your first AXTL backend."
 ---
 
-Describe how someone begins using your product. What is the first thing they need to do? Are there any prerequisites?
+# Quickstart
 
-A quickstart should take someone from zero to using your product. They'll get a quick win and a sense of what they can accomplish.
+This guide shows the intended public flow. Replace placeholders before running commands.
 
 ## Prerequisites
 
-Before you begin, you must have:
+- An AXTL account.
+- A platform bearer token for the AXTL control API. Create or manage API access from the AXTL dashboard.
+- Your API base URL. Use `{AXTL_API_BASE_URL}` until your workspace confirms the production base URL.
 
-- Requirement one (for example, Node.js 18+, a free account, an API key)
-- Requirement two (for example, a compatible device, a compatible browser, a compatible operating system)
+<Note>
+  During the beta, API access, quotas, and advanced workspace settings may vary by workspace.
+</Note>
 
-## Get started
+```bash
+export AXTL_API_BASE_URL="{AXTL_API_BASE_URL}"
+export AXTL_TOKEN="{AXTL_TOKEN}"
+```
 
-<Steps>
-  <Step title="Install">
-    Describe how to install your product or sign up.
+## 1. Create a backend generation
 
-    ```bash
-    npm install your-package
-    ```
-  </Step>
-  <Step title="Configure">
-    Describe any setup or configuration needed before first use.
+```bash
+curl -X POST "$AXTL_API_BASE_URL/v1/generate" \
+  -H "Authorization: Bearer $AXTL_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Support Triage API",
+    "prompt": "Create a backend API that accepts a support ticket, classifies urgency, suggests a response, and returns JSON.",
+    "region": "auto",
+    "autoDeploy": false
+  }'
+```
 
-    ```bash
-    your-cli init
-    ```
-  </Step>
-  <Step title="Run it">
-    Show the first thing a user does to see it working.
+Save `data.agent.id` as `agentId` and `data.job.id` as `jobId`.
 
-    ```bash
-    your-cli start
-    ```
-  </Step>
-</Steps>
+## 2. Check generation status
 
-<Tip>
-  Give people a way to get help. This could be a link to a support page, a chat with a customer support agent, or a forum for your product.
+```bash
+curl "$AXTL_API_BASE_URL/v1/generate/{jobId}" \
+  -H "Authorization: Bearer $AXTL_TOKEN"
+```
 
-  Example: Need help? Reach out to us at [support@yourcompany.com](mailto:support@yourcompany.com).
-</Tip>
+Wait until the job status is `completed`. Generation jobs can also report `queued` or `failed`; treat other beta statuses as progress details.
+
+## 3. Deploy the backend
+
+```bash
+curl -X POST "$AXTL_API_BASE_URL/v1/deploy/{agentId}" \
+  -H "Authorization: Bearer $AXTL_TOKEN"
+```
+
+Then poll deployment status:
+
+```bash
+curl "$AXTL_API_BASE_URL/v1/deploy/{agentId}/status" \
+  -H "Authorization: Bearer $AXTL_TOKEN"
+```
+
+## 4. Get the endpoint
+
+```bash
+curl "$AXTL_API_BASE_URL/v1/deploy/{agentId}/endpoint" \
+  -H "Authorization: Bearer $AXTL_TOKEN"
+```
+
+## 5. Create an agent API key
+
+```bash
+curl -X POST "$AXTL_API_BASE_URL/v1/agents/{agentId}/api-keys" \
+  -H "Authorization: Bearer $AXTL_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Quickstart"}'
+```
+
+Copy the returned `data.key` immediately. AXTL returns the raw key only once.
+
+```bash
+export AXTL_AGENT_KEY="{AXTL_AGENT_KEY}"
+```
+
+## 6. Invoke the backend
+
+```bash
+curl -X POST "$AXTL_API_BASE_URL/v1/invoke/{agentSlug}" \
+  -H "Authorization: Bearer $AXTL_AGENT_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"ticket":"Customer cannot reset password and is blocked from logging in."}'
+```
+
+## Next steps
+
+- [Create a backend](/guides/create-a-backend)
+- [Deploy a backend](/guides/deploy-a-backend)
+- [Invoke a backend](/guides/invoke-a-backend)
+- [Manage API keys](/guides/manage-api-keys)

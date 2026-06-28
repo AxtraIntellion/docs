@@ -1,0 +1,57 @@
+---
+title: "Deploy a backend"
+description: "Publish a generated backend and get an endpoint URL."
+---
+
+# Deploy a backend
+
+Deploy when the generated backend is ready.
+
+## Start deployment
+
+```bash
+curl -X POST "$AXTL_API_BASE_URL/v1/deploy/{agentId}" \
+  -H "Authorization: Bearer $AXTL_TOKEN"
+```
+
+The backend must be ready before deployment. If it is still generating, validating, failed, or already deploying, AXTL returns an error.
+
+AXTL returns:
+
+```json
+{
+  "data": {
+    "deploymentId": "dep_...",
+    "jobId": "job_...",
+    "agentId": "agent_...",
+    "status": "deploying",
+    "endpointUrl": null
+  }
+}
+```
+
+## Check deployment status
+
+```bash
+curl "$AXTL_API_BASE_URL/v1/deploy/{agentId}/status" \
+  -H "Authorization: Bearer $AXTL_TOKEN"
+```
+
+The status response includes `data.agentId`, `data.agentStatus`, `data.endpointUrl`, and `data.deployment`.
+
+## Get the endpoint URL
+
+```bash
+curl "$AXTL_API_BASE_URL/v1/deploy/{agentId}/endpoint" \
+  -H "Authorization: Bearer $AXTL_TOKEN"
+```
+
+## Common deployment errors
+
+| Error | Meaning |
+|---|---|
+| `agent_not_found` | The agent does not exist or does not belong to the authenticated user. |
+| `agent_not_ready` | The generated backend is not ready for deployment. |
+| `deploy_in_progress` | A deployment is already running for this backend. |
+| `quota_exceeded` | The account has exceeded a deployment quota. Limits may vary by workspace during the beta. |
+| `endpoint_not_available` | The backend does not have a public endpoint yet. |

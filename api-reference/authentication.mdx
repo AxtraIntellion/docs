@@ -1,0 +1,52 @@
+---
+title: "Authentication"
+description: "How clients authenticate with AXTL."
+---
+
+# Authentication
+
+Most AXTL control API requests use a bearer token:
+
+```bash
+curl "$AXTL_API_BASE_URL/v1/agents" \
+  -H "Authorization: Bearer $AXTL_TOKEN"
+```
+
+## Token types
+
+| Token/key | Purpose | Status |
+|---|---|---|
+| AXTL bearer token | Calls the AXTL control API. | Create or manage API access from the AXTL dashboard. |
+| Agent API key | Invokes one deployed backend through `POST /v1/invoke/{slug}`. | Header and agent scope verified. |
+| Download token | Allows browser-friendly artifact download links for `/v1/downloads/{agentId}/{filename}`. | Signed query token verified; token minting is control API only. |
+| Stream token | Allows browser-friendly generation progress streaming for `/v1/generate/{jobId}/stream`. | Signed query token verified; token minting is control API only. |
+
+## Agent API keys
+
+Create an agent API key with a platform bearer token:
+
+```bash
+curl -X POST "$AXTL_API_BASE_URL/v1/agents/{agentId}/api-keys" \
+  -H "Authorization: Bearer $AXTL_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Production"}'
+```
+
+Then invoke the deployed backend with the returned one-time key:
+
+```bash
+curl -X POST "$AXTL_API_BASE_URL/v1/invoke/{agentSlug}" \
+  -H "Authorization: Bearer $AXTL_AGENT_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"input":"hello"}'
+```
+
+The agent key must belong to the agent identified by `{agentSlug}`.
+
+## Security basics
+
+- Treat all tokens as secrets.
+- Send tokens only over HTTPS.
+- Rotate exposed keys.
+- Revoke unused agent keys.
+- Do not publish tokens in client-side source code.

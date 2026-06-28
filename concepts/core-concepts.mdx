@@ -1,0 +1,50 @@
+---
+title: "Core concepts"
+description: "The public terms used across AXTL Docs."
+---
+
+# Core concepts
+
+## Agent
+
+An agent is the main AXTL resource. It represents a generated backend and its related configuration, versions, deployments, API keys, and usage.
+
+## Requirements
+
+Requirements are the plain-English instructions you give AXTL. They describe the API behavior you want.
+
+## Spec
+
+A spec is the structured plan AXTL may create from your requirements before generation. Some workspaces may expose extra review or approval steps during the beta.
+
+## Generation
+
+Generation is the process that turns requirements or an approved spec into a backend artifact.
+
+## Artifact
+
+An artifact is the generated backend package. It can be downloaded or deployed when it passes the required checks.
+
+## Deployment
+
+A deployment publishes a generated backend and creates an endpoint URL.
+
+## Endpoint
+
+An endpoint is a URL you call from your application. AXTL has control API endpoints, and your deployed backend has its own runtime endpoints.
+
+## API key
+
+An API key authorizes access. AXTL distinguishes platform bearer authentication for control API calls from agent-scoped API keys for invoking a deployed backend.
+
+Agent API keys use:
+
+```text
+Authorization: Bearer {AXTL_AGENT_KEY}
+```
+
+Agent keys are scoped to one agent. A key created for one agent cannot invoke another agent slug.
+
+## Usage
+
+Usage includes generation jobs, deployments, test calls, and quota consumption. Limits may vary by workspace during the beta.

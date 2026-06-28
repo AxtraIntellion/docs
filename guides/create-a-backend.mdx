@@ -1,0 +1,77 @@
+---
+title: "Create a backend"
+description: "Generate a backend API from plain-English requirements."
+---
+
+# Create a backend
+
+Use `POST /v1/generate` to start a backend generation job.
+
+## Request
+
+```bash
+curl -X POST "$AXTL_API_BASE_URL/v1/generate" \
+  -H "Authorization: Bearer $AXTL_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Lead Qualification API",
+    "prompt": "Create an API that accepts a lead profile, scores fit, lists missing fields, and returns next actions.",
+    "region": "auto",
+    "autoDeploy": false
+  }'
+```
+
+## Fields
+
+| Field | Required | Notes |
+|---|---:|---|
+| `name` | Yes | Human-readable backend name. Verified schema: 2 to 120 characters. |
+| `prompt` | Yes | Plain-English requirements. Verified schema: 10 to 100000 characters. |
+| `model` | No | Model selection is managed by AXTL unless your workspace exposes advanced model settings. |
+| `region` | No | Use `auto` unless your workspace settings specify otherwise. |
+| `autoDeploy` | No | Defaults to `false` in current schema. |
+
+## Response
+
+AXTL returns `202 Accepted`.
+
+```json
+{
+  "data": {
+    "agent": {
+      "id": "agent_...",
+      "slug": "lead-qualification-api",
+      "name": "Lead Qualification API",
+      "status": "generating"
+    },
+    "job": {
+      "id": "job_...",
+      "status": "queued",
+      "progress": 0,
+      "provider": "pending",
+      "model": "gpt-5.2"
+    }
+  }
+}
+```
+
+The exact ID format is not part of the public contract yet.
+
+## Check status
+
+```bash
+curl "$AXTL_API_BASE_URL/v1/generate/{jobId}" \
+  -H "Authorization: Bearer $AXTL_TOKEN"
+```
+
+The status response includes `data.id`, `data.agentId`, `data.agentSlug`, `data.status`, `data.progress`, `data.logs`, and optional artifact, validation, and failure fields.
+
+## Write better requirements
+
+Good requirements include:
+
+- The input payload your API should accept.
+- The output shape you expect.
+- External systems the backend should call, if any.
+- Validation rules.
+- Failure behavior.

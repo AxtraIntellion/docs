@@ -1,0 +1,57 @@
+---
+title: "Errors"
+description: "AXTL error response format and common status codes."
+---
+
+# Errors
+
+AXTL returns structured API errors for most domain failures. Some authentication middleware failures still return a simpler string error, so clients should not assume every `401` has a `code`.
+
+## Error shape
+
+```json
+{
+  "error": {
+    "code": "agent_not_found",
+    "message": "Agent not found",
+    "details": {}
+  }
+}
+```
+
+`details` may be omitted.
+
+## Common status codes
+
+| Status | Meaning |
+|---:|---|
+| `400` | Invalid request. |
+| `401` | Missing or invalid authentication. |
+| `403` | Authenticated but not allowed. |
+| `404` | Resource not found. |
+| `409` | Current resource state does not allow the action. |
+| `413` | Request body too large. |
+| `415` | Unsupported content type. |
+| `422` | Validation failed. |
+| `429` | Quota or rate limit exceeded. |
+| `500` | Internal error. |
+| `503` | Service unavailable or required configuration missing. |
+
+## Common error codes
+
+| Code | Usually means |
+|---|---|
+| `agent_not_found` | The agent does not exist or is not owned by the caller. |
+| `agent_not_ready` | The backend is not ready for deployment. |
+| `deploy_in_progress` | A deployment is already running. |
+| `endpoint_not_available` | No endpoint URL is available yet. |
+| `quota_exceeded` | A quota has been reached. Limits may vary by workspace during the beta. |
+| `missing_agent_api_key` | Public invocation did not include an agent API key. |
+| `malformed_agent_api_key` | Public invocation did not use a bearer agent API key. |
+| `invalid_agent_api_key` | Public invocation used an unknown key. |
+| `agent_api_key_revoked` | Public invocation used a revoked key. |
+| `agent_api_key_scope_mismatch` | Public invocation used a key for another agent. |
+| `not_deployed` | The agent has no live endpoint yet. |
+| `invalid_json` | The request body was not valid JSON. |
+| `endpoint_timeout` | The deployed backend did not respond before timeout. |
+| `endpoint_unreachable` | AXTL could not reach the deployed backend. |

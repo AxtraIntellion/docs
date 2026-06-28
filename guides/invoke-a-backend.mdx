@@ -1,0 +1,61 @@
+---
+title: "Invoke a backend"
+description: "Call a deployed AXTL backend from your application."
+---
+
+# Invoke a backend
+
+After deployment, invoke the backend through its AXTL agent slug with an agent API key.
+
+Agent API keys are different from platform bearer tokens. Create one before calling a deployed backend:
+
+```bash
+curl -X POST "$AXTL_API_BASE_URL/v1/agents/{agentId}/api-keys" \
+  -H "Authorization: Bearer $AXTL_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Production"}'
+```
+
+Copy the returned `data.key`.
+
+## Invoke by slug
+
+```bash
+curl -X POST "$AXTL_API_BASE_URL/v1/invoke/{agentSlug}" \
+  -H "Authorization: Bearer $AXTL_AGENT_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "input": "Classify this support request and suggest a next action."
+  }'
+```
+
+AXTL forwards the JSON request body to the generated backend runtime. The generated backend decides the final request and response schema.
+
+Successful calls return an invocation envelope:
+
+```json
+{
+  "data": {
+    "status": 200,
+    "ok": true,
+    "latencyMs": 123,
+    "response": {
+      "answer": "ok"
+    }
+  }
+}
+```
+
+## Common invocation errors
+
+| Error | Meaning |
+|---|---|
+| `missing_agent_api_key` | The request did not include an agent API key. |
+| `malformed_agent_api_key` | The authorization header was not a bearer agent key. |
+| `invalid_agent_api_key` | The agent API key was not recognized. |
+| `agent_api_key_revoked` | The agent API key was revoked. |
+| `agent_api_key_scope_mismatch` | The key belongs to a different agent. |
+| `not_deployed` | The agent does not have a live endpoint yet. |
+| `invalid_json` | The request body was not valid JSON. |
+| `endpoint_timeout` | The deployed backend timed out. |
+| `endpoint_unreachable` | AXTL could not reach the deployed backend. |

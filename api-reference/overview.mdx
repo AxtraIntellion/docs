@@ -1,0 +1,42 @@
+---
+title: "API overview"
+description: "Minimal AXTL API reference for the public docs MVP."
+---
+
+# API overview
+
+This reference is intentionally minimal until the public API surface is finalized.
+
+## Base URL
+
+```text
+{AXTL_API_BASE_URL}
+```
+
+Use `{AXTL_API_BASE_URL}` until your workspace confirms the production base URL.
+
+## Endpoint families
+
+| Area | Endpoints |
+|---|---|
+| Generation | `POST /v1/generate`, `GET /v1/generate/{jobId}`, `GET /v1/generate/{jobId}/stream`, `POST /v1/generate/{jobId}/stream-token` |
+| Agents | `GET /v1/agents`, `GET /v1/agents/{id}`, `GET /v1/agents/by-slug/{slug}` |
+| API keys | `GET /v1/agents/{id}/api-keys`, `POST /v1/agents/{id}/api-keys`, `POST /v1/agents/{id}/api-keys/{keyId}/revoke`, `POST /v1/agents/{id}/api-keys/{keyId}/rotate` |
+| Deployment | `POST /v1/deploy/{id}`, `GET /v1/deploy/{id}/status`, `GET /v1/deploy/{id}/endpoint` |
+| Invocation | `POST /v1/invoke/{slug}` |
+| Downloads | `POST /v1/downloads/{agentId}/token`, `GET /v1/downloads/{agentId}/latest`, `GET /v1/downloads/{agentId}/{filename}` |
+| Validation | `POST /v1/validation/{id}/validate`, `GET /v1/validation/jobs/{jobId}`, `GET /v1/validation/agents/{id}/reports` |
+
+## Authentication
+
+Most control API routes require:
+
+```text
+Authorization: Bearer {AXTL_TOKEN}
+```
+
+`POST /v1/invoke/{slug}` requires an agent API key:
+
+```text
+Authorization: Bearer {AXTL_AGENT_KEY}
+```
