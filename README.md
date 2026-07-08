@@ -1,6 +1,8 @@
 # AXTL Docs
 
-Public Mintlify documentation for AXTL, Backend Factory by Axtra Intellion.
+Public Mintlify documentation for AXTL, by Axtra Intellion — AI Backend as a Service. Build backend APIs your AI agents can call.
+
+Live at [docs.axtl.dev](https://docs.axtl.dev). Product site: [axtl.dev](https://axtl.dev).
 
 ## Development
 
