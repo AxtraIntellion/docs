@@ -1,7 +1,8 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "AXTL Docs",
+  "name": "Axtra Intellion",
+  "description": "AXTL by Axtra Intellion is a spec-first control plane that turns business requirements into reviewable AI-agent backends teams can inspect, validate, deploy, or download.",
   "colors": {
     "primary": "#8b5cf6",
     "light": "#fbfcff",
@@ -74,6 +75,20 @@
       "type": "button",
       "label": "Open AXTL",
       "href": "https://axtl.dev"
+    }
+  },
+  "seo": {
+    "metatags": {
+      "canonical": "https://docs.axtl.dev"
+    },
+    "organization": {
+      "id": "https://axtl.dev/#organization",
+      "name": "Axtra Intellion",
+      "url": "https://axtl.dev/",
+      "logo": "https://docs.axtl.dev/logo/light.svg",
+      "sameAs": [
+        "https://github.com/AxtraIntellion"
+      ]
     }
   },
   "contextual": {
