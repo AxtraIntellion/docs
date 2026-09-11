@@ -1,33 +1,35 @@
-> **First-time setup**: Customize this file for your project. Prompt the user to customize this file for their project.
-> For Mintlify product knowledge (components, configuration, writing standards),
-> install the Mintlify skill: `npx skills add https://mintlify.com/docs`
+# AXTL Documentation Instructions
 
-# Documentation project instructions
+This repository contains public AXTL documentation built with Mintlify. Pages
+are MDX with YAML frontmatter; `docs.json` owns navigation and site configuration.
+Use [README.md](README.md) for local preview setup.
 
-## About this project
+## Product language and claims
 
-- This is a documentation site built on [Mintlify](https://mintlify.com)
-- Pages are MDX files with YAML frontmatter
-- Configuration lives in `docs.json`
-- Use the Mintlify MCP server, `https://mcp.mintlify.com`, to edit content and settings via MCP
-- Use the Mintlify docs MCP server, `https://www.mintlify.com/docs/mcp`, to query information about using Mintlify via MCP
+- Describe AXTL as a human-approved, spec-first backend engineering control
+  plane. Lead with business-logic fit, inspectable code, validation evidence,
+  and user ownership.
+- Distinguish the AXTL platform from separately deployed generated ALMS runtimes.
+  Describe implemented behavior from current platform code and product docs;
+  verify live availability separately before making a live-state claim.
+- Use Axga-branded customer model labels. Do not publish provider keys, raw
+  internal model identifiers, credentials, or internal-only operations details.
+- Keep current features and future plans distinct. Do not invent capabilities,
+  deployment URLs, validation results, or customer evidence.
 
-## Terminology
+## Editing and verification
 
-{/* Add product-specific terms and preferred usage */}
-{/* Example: Use "workspace" not "project", "member" not "user" */}
-
-## Style preferences
-
-{/* Add any project-specific style rules below */}
-
-- Use active voice and second person ("you")
-- Keep sentences concise — one idea per sentence
-- Use sentence case for headings
-- Bold for UI elements: Click **Settings**
-- Code formatting for file names, commands, paths, and code references
-
-## Content boundaries
-
-{/* Define what should and shouldn't be documented */}
-{/* Example: Don't document internal admin features */}
+- Read the affected page and relevant navigation. Consult Mintlify documentation
+  or an available skill when component or configuration behavior needs it; an
+  ordinary content edit does not require installing a skill or configuring MCP.
+- Use active voice, second person, concise sentences, and sentence case headings.
+  Bold UI labels and use code formatting for commands, paths, and code references.
+- Check links, navigation, frontmatter, and code examples affected by the change.
+  Use `mint dev` from this repository for visual or configuration changes. An
+  instruction-only edit needs content and link checks, not a site preview.
+- `axtl-docs` is an overlapping sibling. Check the connected repository/branch
+  in Mintlify or GitHub deployment evidence before changing deployment claims.
+  Mirror only when the task and the sibling's ownership require it; a local
+  instruction change does not itself require copying this file there.
+- Keep changes local unless publishing is authorized. Finish the requested edit
+  and relevant checks, then report the result and any unverified claims.
